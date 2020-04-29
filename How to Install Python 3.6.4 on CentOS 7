@@ -1,0 +1,84 @@
+How to Install Python 3.6.4 on CentOS 7
+=======================================
+
+yum install python 3We’ll show you how to install Python 3.6.4 on CentOS 7. Python is at the core of many popular websites and programs – YouTube, Instagram, and even Yum on CentOS, to name a few. They all rely on Python’s reliability and performance to complete many tasks at a time. Python is a general-purpose object-oriented programming language designed to be used as a software solution for almost all kinds of problems. However, the pre-installed version of Python found on CentOS 7 is a much older version. In order to have the latest version of Python, the user will have to install it manually.
+
+install python 3.6.4 on CentOS 7In this tutorial, we will show you two methods of installing Python version 3.6.4 on your CentOS 7 machine. The reason there are two methods is that Python 3.6.4 does not come by default in the built-in Yum repositories. So, we can either compile Python on our machine from the source code or add a repository that has a pre-compiled version of Python for CentOS 7.
+
+Method 1: Install Python 3.6.4 on CentOS 7 From a Repository
+------------------------------------------------------------
+
+This is the easier method of the two for installing Python on your machine. Here, we simply add a repository that has the pre-compiled version ready for us to install. In this case, we are adding the Inline with Upstream Stable repository, a community project whose goal is to bring new versions of software to RHEL-based systems.
+
+Step 1: Open a Terminal and add the repository to your Yum install.
+
+$ sudo yum install -y https://centos7.iuscommunity.org/ius-release.rpm
+
+Step 2: Update Yum to finish adding the repository.
+
+$ sudo yum -y update
+
+Step 3: Download and install Python.
+
+This will not only install Python – but it will also install pip to help you with installing add-ons.
+
+$ sudo yum install -y python36u python36u-libs python36u-devel python36u-pip
+
+Once these commands are executed, simply check if the correct version of Python has been installed by executing the following command:
+
+$ python3.6 -V
+
+You have now finished installing Python 3.6.4 on your CentOS 7 machine, as well as installing a native Python package management tool called pip.
+
+
+
+
+
+Method 2: Compiling Python 3.6.4 on CentOS 7 From Source Code
+-------------------------------------------------------------
+
+installing python 3.6.4 on CentOS 7This is the more complicated method of the two, and will take more time – however, this method gives you more control over what gets installed and what doesn’t. It can also be more secure at times, depending on where the software package is downloaded from.
+
+Important: Keep in mind that your Yum package manager will not know that you have installed Python 3.6.4 (or any other software) if you install software by manually compiling the source code. This means that no updates will be available for your manually installed software.
+
+Step 1: Install the development tools needed for compilation.
+
+First, we will need the tools in order to be able to compile and install programs from their source code. To do this, we will install the group “Development Tools” through Yum itself:
+
+$ sudo yum groupinstall -y "Development Tools"
+
+Once this is done, move on to step 2.
+
+Step 2: Download the Python source files.
+
+First, we need to create a directory in which our install will take place. Make a directory with a name of your choosing, then enter the directory. Once you are in your new directory, enter the following command to download the compressed Python source file.
+
+$ wget https://www.python.org/ftp/python/3.6.4/Python-3.6.4.tar.xz
+
+Once the file is finished downloading, uncompress the file by using tar, then enter into the new directory that was just created:
+
+$ tar -xJf Python-3.6.4.tar.xz
+
+$ cd Python-3.6.4
+
+Step 3: Run the configuration script.
+
+Use the following command to have the installation software check your system before actually starting the installation process.
+
+$ ./configure
+
+This command ensures that the install will work, along with creating a special ‘makefile’ that is unique to your system. This makefile is what you will use to install Python onto your system.
+
+Step 4: Install Python.
+
+Now we can finally execute the makefile. Run the following command to install Python onto your system. Note: This will take a few minutes. The speed of the compilation and install will depend on the speed of your processor.
+
+First, we run the ‘make’ command which compiles the program.
+
+$ make
+
+Then, once that is finished, we can run the installation command.
+
+$ make install
+
+Once this command finishes, you will have installed Python successfully, along with pip and setuptools. From here, creating a virtual environment is easy, and coding and executing the latest Python code is now possible.
